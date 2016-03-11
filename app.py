@@ -158,6 +158,11 @@ class AudioHandler(BaseHandler):
 
 
 def main():
+        pid = os.getpid()
+        fp = open("/var/run/alexaweb.pid", "w")
+        fp.write("%s" % pid);
+        fp.close()
+
 	settings = {
 	    "cookie_secret": "parisPOLANDbroadFENCEcornWOULD",
 	    "login_url": "/static/welcome.html",
