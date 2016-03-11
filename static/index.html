@@ -8,9 +8,10 @@
 		  width:  100%;
 		  height: 100%;
 		  margin: 0px;
+		  background-color: #000;
 		}
 		canvas {
-		    border: 3px solid #ccc;
+		    border: 0px;
 		    border-radius: 10px;
 		}
 		#help {
@@ -63,17 +64,18 @@
 		<script>
 		var c=document.getElementById("myCanvas");
 		var ctx=c.getContext("2d");
-		var circle = new Path2D();
+                c.addEventListener("contextmenu", function (e) { e.preventDefault(); }, false);
 		
 		function layout(){
 			ctx.canvas.width  = window.innerWidth;
 			ctx.canvas.height = window.innerHeight;
+			ctx.fill();
 			var x = c.width / 2;
 			var y = c.height / 2;
 			var radius = Math.min(c.width, c.height) / 4;
-			circle.arc(x, y, radius, 0, 2 * Math.PI);
+			ctx.beginPath();
+			ctx.arc(x, y, radius, 0, 2 * Math.PI);
 			ctx.lineWidth = 15;
-			ctx.rect(0, 0, c.width, c.height);
 			ctx.fill();
 			ctx.shadowOffsetX = 0;
 			ctx.shadowOffsetY = 0;
@@ -105,10 +107,8 @@
 			
 			
 		function draw(col){
-			ctx.clearRect(0, 0, c.width, c.height);
-			ctx.fill();
 			ctx.strokeStyle = col;
-			ctx.stroke(circle);
+			ctx.stroke();
 		}
 		
 		function log(data){
@@ -127,7 +127,8 @@
 		};
 		
 		window.onresize = function() {
-			location.reload();
+			layout();
+			draw('white');
 		};
 		
 		$(document).ready(function(){
