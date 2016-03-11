@@ -72,7 +72,7 @@ class CodeAuthHandler(tornado.web.RequestHandler):
 	def get(self):
 		code=self.get_argument("code")
 		path = self.request.protocol + "://" + self.request.host 
-		callback = path+"/code"
+		callback = path+"code"
 		payload = {"client_id" : Client_ID, "client_secret" : Client_Secret, "code" : code, "grant_type" : "authorization_code", "redirect_uri" : callback }
 		url = "https://api.amazon.com/auth/o2/token"
 		r = requests.post(url, data = payload)
@@ -158,11 +158,6 @@ class AudioHandler(BaseHandler):
 
 
 def main():
-	pid = os.getpid()
-        fp = open("/var/run/alexaWebApp.pid", "w")
-        fp.write("%s" % pid);
-        fp.close()
-
 	settings = {
 	    "cookie_secret": "parisPOLANDbroadFENCEcornWOULD",
 	    "login_url": "/static/welcome.html",
@@ -176,15 +171,13 @@ def main():
 											(r'/(favicon.ico)', tornado.web.StaticFileHandler,{'path': static_path}),
 											(r'/static/(.*)', tornado.web.StaticFileHandler, {'path': static_path}),
 											], **settings)
-	#http_server = tornado.httpserver.HTTPServer(application)
-        http_server = tornado.httpserver.HTTPServer(application, ssl_options={
-                "certfile": os.path.join("my.crt"),
-                "keyfile": os.path.join("my.key"),
-        })
+	http_server = tornado.httpserver.HTTPServer(application)
 	port = int(os.environ.get("PORT", 5000))
 	http_server.listen(port)
 	tornado.ioloop.IOLoop.instance().start()
 
 if __name__ == "__main__":
 	main()
+	
+	
 
